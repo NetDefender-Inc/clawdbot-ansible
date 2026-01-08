@@ -41,10 +41,9 @@
   ansible.builtin.blockinfile:
     path: /etc/ufw/after.rules
     marker: "# {mark} ANSIBLE MANAGED BLOCK - Docker isolation"
-    insertbefore: "^# don't delete the 'COMMIT' line"
+    insertbefore: "^COMMIT$"
     block: |
       # Docker port isolation - block all forwarded traffic by default
-      *filter
       :DOCKER-USER - [0:0]
 
       # Allow established connections
@@ -55,9 +54,6 @@
 
       # Block all other forwarded traffic to Docker containers from external interface
       -A DOCKER-USER -i {{ default_interface.stdout }} -j DROP
-
-      # Return to continue processing
-      COMMIT
     create: false
 
 - name: Create Docker daemon config directory
