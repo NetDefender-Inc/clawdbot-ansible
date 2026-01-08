@@ -17,8 +17,9 @@ if [ $PLAYBOOK_EXIT -eq 0 ]; then
     echo ""
     sleep 1
     
-    # Switch to clawdbot with explicit interactive bash shell
-    exec sudo -i -u clawdbot /bin/bash --login
+    # The trick: replace current shell completely with sudo's shell
+    # Don't use exec alone - use it within a login command
+    exec sudo -u clawdbot -i
 else
     echo "❌ Playbook failed with exit code $PLAYBOOK_EXIT"
     exit $PLAYBOOK_EXIT
